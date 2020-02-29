@@ -3,132 +3,179 @@
 <head>
     <meta charset="utf-8"/>
     <title>카맵</title>
-    <style type=""
+<style>
+    .wrap {position: absolute;margin-left: -144px;left: 0;bottom: 40px;width: 400px;height: 332px;;text-align: left;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+    .wrap * {padding: 0px;margin: 0px;}
+    .wrap .info {overflow: hidden;border-radius: 20px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;background: #fff;}
+    .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+    .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+    .info .close:hover {cursor: pointer;}
+    .info .body {position: relative;}
+    .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+    .desc .name {font-size: 16px;color: #000000;margin-top: -2px;}
+    .desc .actor {font-size: 11px;color: #000000;margin-top: -2px;}
+    .info .img {position: absolute;top: 1px; overflow:hidden; left: 5px;width: 74px;height: 78px;border: 1px solid #ddd;color: #888;}
+    .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+    .info .link {color: #5085BB;}
+    body {
+        margin: 20px;
+        padding: 20px;
+    }
+</style>
 </head>
 <body>
 <h1>TFT</h1>
 <h2>to find theater</h2>
-<div id="map" style="width:90%;height:600px;"></div>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=앱키"></script>
+<div id="map" style="width:100%;height:600px;"></div>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=앱키넣는자리"></script>
     <script>
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption = { 
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
         center: new kakao.maps.LatLng(37.572721, 126.975525), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        level: 5 // 지도의 확대 레벨
     };
 
-  var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-  //마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다
-var positions = [
-    {
-        content: '<div>예술의 전당</div>',
-        latlng: new kakao.maps.LatLng(37.479524, 127.013988)
-    },
-    {
-        content: '<div>디큐브아트센터</div>',
-        latlng: new kakao.maps.LatLng(37.509126, 126.889620)
-    },
-    {
-        content: '<div>세종문화회관 대극장</div>',
-        latlng: new kakao.maps.LatLng(37.572721, 126.975525)
-    },
-    {
-        content:'<div>샤롯데씨어터</div>',
-        latlng: new kakao.maps.LatLng(37.510989, 127.099839)
-    },
-    {
-        content: '<div>블루스퀘어</div>',
-        latlng: new kakao.maps.LatLng(37.541110, 127.002457)
-    },
-    {
-        content: '<div>홍익대 대학로 아트센터</div>',
-        latlng: new kakao.maps.LatLng(37.576676, 127.001457)
-    },
-    {
-        content: '<div>우리금융아트홀</div>',
-        latlng: new kakao.maps.LatLng(37.516939, 127.124957)
-    }
+var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-];
+// 지도에 마커를 표시합니다 
+// var marker1 = new kakao.maps.Marker({
+//     map: map, 
+//     position: new kakao.maps.LatLng(37.572721, 126.975525)
+// });
+
+// // 지도에 마커를 표시합니다 
+// var marker2 = new kakao.maps.Marker({
+//     map: map, 
+//     position: new kakao.maps.LatLng(37.479524, 127.013988)
+// });
+
+// //지도에 마커를 표시합니다
+// var marker3 = new kakao.maps.Marker({
+//     map: map,
+//     position: new kakao.maps.LatLng(37.510989, 127.099839)
+// })
 
 
- 
-// 마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다 
-
-for (var i = 0; i < positions.length; i ++) {
-    // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
-        map: map, // 마커를 표시할 지도
-        position: positions[i].latlng // 마커의 위치
-    });
-
-    // 마커에 표시할 인포윈도우를 생성합니다 
-    var infowindow = new kakao.maps.InfoWindow({
-        content: positions[i].content // 인포윈도우에 표시할 내용
-    });
-
-    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-    // 이벤트 리스너로는 클로저를 만들어 등록합니다 
-    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-}
-
-// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
-function makeOverListener(map, marker, infowindow) {
-    return function() {
-        infowindow.open(map, marker);
-    };
-}
-
-// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
-function makeOutListener(infowindow) {
-    return function() {
-        infowindow.close();
-    };
-}
-
-var marker = new kakao.maps.Marker({
-    map: map, 
-    position: new kakao.maps.LatLng(37.566280, 127.014642)
-});
 
 
-var content = '<div class="wrap">' + 
+
+// 커스텀 오버레이에 표시할 컨텐츠 입니다
+// 커스텀 오버레이는 아래와 같이 사용자가 자유롭게 컨텐츠를 구성하고 이벤트를 제어할 수 있기 때문에
+// 별도의 이벤트 메소드를 제공하지 않습니다 
+var content1 = '<div class="wrap">' + 
             '    <div class="info">' + 
             '        <div class="title">' + 
-            '            뮤지컬 \'레베카\'' + 
-            '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
+            '            세종문화회관 대극장' + 
+            '            <div class="close" onclick="closeOverlay(0)" title="닫기"></div>' + 
             '        </div>' + 
             '        <div class="body">' + 
             '            <div class="img">' +
-            '                <img src="http://ticketimage.interpark.com/Play/image/large/19/19013796_p.gif" width="73" height="70">' +
+            '                <img src="http://ticketimage.interpark.com/Play/image/large/P0/P0001854_p.gif"" width=100% height=100%>' +
             '           </div>' + 
             '            <div class="desc">' + 
-            '                <div class="ellipsis">충무아트센터(서울특별시 중구 흥인동 퇴계로)</div>' + 
-            '                <div class="jibun ellipsis">류정한, 엄기준, 카이, 신성록, 신영숙, 옥주현, 장은아, 알리</div>' + 
-            '                <div><a href="http://ticket.interpark.com/Ticket/Goods/GoodsInfo.asp?GoodsCode=19013796" class="link">인터파크티켓</a></div>' + 
-            '<div><a href="https://ticket.melon.com/performance/index.htm?prodId=204240" class="link">멜론티켓</a></div>'+
+            '                <div class="name">뮤지컬 여명의 눈동자</div>' + 
+            '                <div class="ellipsis">서울특별시 종로구 세종로 세종대로 175</div>' + 
+            '                <div><a href="http://ticket.interpark.com/Ticket/Goods/GoodsInfo.asp?GroupCode=P0001854" target="_blank" class="link">인터파크</a></div>' + 
             '            </div>' + 
             '        </div>' + 
             '    </div>' +    
             '</div>';
 
-var overlay = new kakao.maps.CustomOverlay({
-    content: content,
-    map: map,
-    position: marker.getPosition()       
-});
+var content2 = '<div class="wrap">' + 
+            '    <div class="info">' + 
+            '        <div class="title">' + 
+            '            예술의전당 오페라하우스' + 
+            '            <div class="close" onclick="closeOverlay(1)" title="닫기"></div>' + 
+            '        </div>' + 
+            '        <div class="body">' + 
+            '            <div class="img">' +
+            '                <img src="http://ticketimage.interpark.com/Play/image/large/19/19016582_p.gif" width=100% height=100%>' +
+            '           </div>' + 
+            '            <div class="desc">' + 
+            '                <div class="name">뮤지컬 웃는 남자</div>' + 
+            '                <div class="ellipsis">서울특별시 서초구 서초3동 남부순환로 2406</div>' + 
+            '                <div><a href="http://ticket.interpark.com/Ticket/Goods/GoodsInfo.asp?GoodsCode=19016582" target="_blank" class="link">인터파크</a></div>' + 
+            '                <div><a href="https://ticket.melon.com/performance/index.htm?prodId=204502" target="_blank" class="link">멜론티켓</a></div>' + 
+            '            </div>' + 
+            '        </div>' + 
+            '    </div>' +    
+            '</div>';            
+var content3 = '<div class="wrap">' + 
+            '    <div class="info">' + 
+            '        <div class="title">' + 
+            '            샤롯데씨어터' + 
+            '            <div class="close" onclick="closeOverlay(2)" title="닫기"></div>' + 
+            '        </div>' + 
+            '        <div class="body">' + 
+            '            <div class="img">' +
+            '                <img src="http://ticketimage.interpark.com/Play/image/large/19/19017827_p.gif" width=100% height=100%>' +
+            '           </div>' + 
+            '            <div class="desc">' + 
+            '                <div class="name">뮤지컬 드라큘라</div>' + 
+            '                <div class="ellipsis">서울특별시 송파구 올림픽로 240</div>' + 
+            '                <div><a href="http://ticket.interpark.com/Ticket/Goods/GoodsInfo.asp?GoodsCode=19017827" target="_blank" class="link">인터파크</a></div>' + 
+            '            </div>' + 
+            '        </div>' + 
+            '    </div>' +    
+            '</div>'; 
 
+var contentArray = [[37.572721, 126.975525, content1], [37.479524, 127.013988, content2], [37.510989, 127.099839, content3]];
+// 마커 위에 커스텀오버레이를 표시합니다
+// 마커를 중심으로 커스텀 오버레이를 표시하기위해 CSS를 이용해 위치를 설정했습니다
+var overlayArray = [];
+
+
+for (var i=0; i<contentArray.length; i++) {
+    var marker = new kakao.maps.Marker({
+        map: map,
+        position: new kakao.maps.LatLng(contentArray[i][0], contentArray[i][1])
+    })
+
+    console.log(contentArray[i][0], contentArray[i][1])
+    var overlay = new kakao.maps.CustomOverlay({
+        content: contentArray[i][2],
+        map: map,
+        position: marker.getPosition()       
+    });
+    overlayArray.push(overlay)
+    kakao.maps.event.addListener(marker, 'click', function() {
+        overlay.setMap(map);
+    });
+}
+
+// var overlay = new kakao.maps.CustomOverlay({
+//     content: content1,
+//     map: map,
+//     position: marker1.getPosition()       
+// });
+
+// var overlay = new kakao.maps.CustomOverlay({
+//     content: content2,
+//     map: map,
+//     position: marker2.getPosition()       
+// });
+
+// var overlay = new kakao.maps.CustomOverlay({
+//     content: content3,
+//     map: map,
+//     position: marker3.getPosition()
+// });
 
 // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-kakao.maps.event.addListener(marker, 'click', function() {
-    overlay.setMap(map);
-});
-
+// kakao.maps.event.addListener(marker1, 'click', function() {
+//     overlay.setMap(map);
+// });
+// kakao.maps.event.addListener(marker2, 'click', function() {
+//     overlay.setMap(map);
+// });
+// kakao.maps.event.addListener(marker3, 'click', function() {
+//     overlay.setMap(map);
+// });
 // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
-function closeOverlay() {
-    overlay.setMap(null);     
+function closeOverlay(i) {
+    overlayArray[i].setMap(null);     
 }
 
 </script>
